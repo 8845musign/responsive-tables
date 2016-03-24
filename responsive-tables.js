@@ -28,7 +28,8 @@ function responsiveTable(selector, bodySelector, breakpoint) {
   function splitTable(original)
   {
     original.wrap("<div class='table-wrapper' />");
-    
+    originalTr = original.find("tr");
+
     var copy = original.clone();
     copy.find("th, td").not(headerSelector).css("display", "none");
     copy.removeClass("responsive");
@@ -42,6 +43,7 @@ function responsiveTable(selector, bodySelector, breakpoint) {
         cntSpan = cntSpan + (rowSpan - 1);
       } else if(cntSpan) {
         self.remove();
+        originalTr.eq(i).children().first().css("display", 'block');
         cntSpan--;
       }
     }
