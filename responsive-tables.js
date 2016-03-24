@@ -1,6 +1,6 @@
 function responsiveTable(selector, bodySelector, breakpoint) {
   var selector = selector ? selector : "table.responsive";
-  var bodySelector = bodySelector ? bodySelector : "td:not(:first-child), th:not(:first-child)";
+  var headerSelector = headerSelector ? headerSelector : "th:first-child, td:first-child";
   var breakpoint = breakpoint ? breakpoint : 767;
 
   var switched = false;
@@ -30,7 +30,7 @@ function responsiveTable(selector, bodySelector, breakpoint) {
     original.wrap("<div class='table-wrapper' />");
     
     var copy = original.clone();
-    copy.find(bodySelector).css("display", "none");
+    copy.find("th, td").not(headerSelector).css("display", "none");
     copy.removeClass("responsive");
     
     original.closest(".table-wrapper").append(copy);
