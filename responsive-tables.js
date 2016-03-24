@@ -32,6 +32,19 @@ function responsiveTable(selector, bodySelector, breakpoint) {
     var copy = original.clone();
     copy.find("th, td").not(headerSelector).css("display", "none");
     copy.removeClass("responsive");
+
+    var copyHeader = copy.find(headerSelector);
+    var cntSpan = 0;
+    for (var i = 0, len = copyHeader.size(); i < len; i++) {
+      var self = copyHeader.eq(i);
+      var rowSpan = self.attr("rowspan");
+      if (rowSpan) {
+        cntSpan = cntSpan + (rowSpan - 1);
+      } else if(cntSpan) {
+        self.remove();
+        cntSpan--;
+      }
+    }
     
     original.closest(".table-wrapper").append(copy);
     copy.wrap("<div class='pinned' />");
@@ -51,8 +64,8 @@ function responsiveTable(selector, bodySelector, breakpoint) {
         tr_copy = copy.find('tr'),
         heights = [];
 
-    tr.each(function (index) {
-      var self = $(this),
+    for (var index = 0, len = tr.size(); index < len; index++) {
+      var self = tr.eq(index);
           tx = self.find('th, td');
 
       tx.each(function () {
@@ -60,11 +73,22 @@ function responsiveTable(selector, bodySelector, breakpoint) {
         heights[index] = heights[index] || 0;
         if (height > heights[index]) heights[index] = height;
       });
+    }
 
-    });
-
-    tr_copy.each(function (index) {
-      $(this).height(heights[index]);
-    });
+    var cntSpan = 0;
+    for (var index = 0, len = tr_copy.size(); index < len; index++) {
+      var self = tr_copy.eq(index);
+      var rowSpan = self.attr("rowspan");
+      if (rowSpan) {
+        var allHeight = 0;
+        for (var span_i = 0; span_i < rowSpan; span_i++) {
+          allHeight = allHeight + heights[index + span_i];
+        }
+        self.height(allHeight);
+        index = index + (rowSpan - 1);
+      } else {
+        self.height(heights[index]);  
+      }
+    }
   }
 }
