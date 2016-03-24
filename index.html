@@ -30,7 +30,11 @@
 	<script src="responsive-tables.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
-      responsiveTable();
+      responsiveTable(
+        "table.responsive",
+        "th:first-child, td:first-child",
+        767
+      );
     });
   </script>
 	
